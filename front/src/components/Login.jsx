@@ -23,7 +23,7 @@ const Login = () => {
     try {
       const res = await axios.post('http://127.0.0.1:7001/api/login', formData);
       if (res.data.status === 200) {
-        navigate(`/ProjectPage?username=${formData.username}&isLoad=false`);
+        navigate(`/ProjectPage?username=${formData.username}`);
       } else {
         alert('用户名或密码错误');
       }

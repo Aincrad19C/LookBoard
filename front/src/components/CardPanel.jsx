@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Box from '@material-ui/core/Box';
 import { useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -98,8 +99,8 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     height: 50,
     position: 'fixed',
-    top: theme.spacing(32),
-    left: theme.spacing(47),
+    top: '50%',
+    left: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: 9900,
   },
@@ -136,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
 function CardPanel() {
   const classes = useStyles();
   const [username, setUsername] = useState('');
-  const [proid, setProid] = useState();
+  const [proid, setProid] = useState(1);
   const location = useLocation();
 
   useEffect(() => {
@@ -512,6 +513,7 @@ function CardPanel() {
   };
 
   const handleCardClick = (card) => {
+    readFileData(card.id);
     setDialogOpen(true);
     handleEditCard(card);
   };
@@ -559,26 +561,117 @@ function CardPanel() {
   }
 
   // 附件上传
-  const [uploadedFileName, setUploadedFileName] = useState('');
+  const [uploadedFileName, setUploadedFileName] = useState([{ filename: "aFile" }]);
 
-  const handleFileChange = async (event) => {
+  const handleFileChange = async (event, cardId) => {
     const file = event.target.files[0]; // 获取文件对象
     const formData = new FormData();
     formData.append('file', file);
     try {
       const res = await axios.post("http://127.0.0.1:7001/upload", formData);
       if (res.data.status === 200) {
+        const dataForm = {
+          files: res.data.body.files,
+          information: {
+            username: username,
+            proId: proid,
+            project_id: cardId,
+            id: Date.now()
+          }
+        }
+        postFileData(dataForm);
+        setUploadedFileName([...uploadedFileName, { filename: file.name }]);
       } else {
       }
     } catch (error) {
       alert('请求失败: ' + error.message);
     }
-    // 更新状态，例如显示文件名
-    setUploadedFileName(file.name);
   };
 
+  async function postFileData(fileForm) {
+    try {
+      const res = await axios.post("http://127.0.0.1:7001/fileData", fileForm);
+      if (res.data.status === 200) {
+        alert("上传成功");
+      } else {
+        alert("上传失败");
+      }
+    } catch (error) {
+      alert('请求失败: ' + error.message);
+    }
+  }
+
+  const handleDeleteFile = (cardId, fileName) => {
+    const fileIndex = uploadedFileName.findIndex(file => file.filename === fileName);
+
+    if (fileIndex >= 0) {
+      postDeleteFileData(cardId, fileName);
+      postDeleteFile(fileName);
+      const updatedList = uploadedFileName.filter(file => file.filename !== fileName);
+      setUploadedFileName(updatedList);
+    };
+  }
+
+  async function postDeleteFileData(project_id, fileName) {
+    const fileForm = {
+      proId: proid,
+      project_id: project_id,
+      fileName: fileName
+    }
+    try {
+      const res = await axios.post("http://127.0.0.1:7001/deleteData", fileForm);
+      if (res.data.status === 200) {
+      } else {
+      }
+    } catch (error) {
+      alert('请求失败: ' + error.message);
+    }
+  }
+
+  async function postDeleteFile(fileName) {
+    try {
+      const res = await axios.post("http://127.0.0.1:7001/deleteFile", { filename: fileName });
+      if (res.data.status === 200) {
+        alert("删除附件成功");
+      } else {
+        alert("删除附件失败");
+      }
+    } catch (error) {
+      alert('请求失败: ' + error.message);
+    }
+  }
+
+  const handleDownLoad = async (fileName) => {
+    try {
+      const res = await axios.post("http://127.0.0.1:7001/downLoadFile", { filename: fileName });
+      if (res.data.status === 200) {
+        alert("文件下载至默认下载目录");
+      } else {
+      }
+    } catch (error) {
+      alert('请求失败: ' + error.message);
+    }
+  }
+
+  const readFileData = async (cardId) => {
+    const fileForm = {
+      proId: proid,
+      project_id: cardId,
+    }
+    try {
+      const res = await axios.post("http://127.0.0.1:7001/readData", fileForm);
+      if (res.data.status === 200) {
+        setUploadedFileName(res.data.body.files);
+      } else {
+        alert("失败");
+      }
+    } catch (error) {
+      alert('请求失败: ' + error.message);
+    }
+  }
+
   return (
-    <div className={showLoadButton ? classes.dimmedBackground : ''}>
+    <div>
       <div className={classes.cardGrid}>
         <div className={classes.roundContainer}>
           <Round />
@@ -603,16 +696,7 @@ function CardPanel() {
           >
             新增任务
           </Button>
-          {showLoadButton && (
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.loadButton}
-              onClick={readAll}
-            >
-              Start Work !
-            </Button>
-          )}
+
         </div>
         <Grid container spacing={4}>
           {cards.map((card) => (
@@ -717,29 +801,17 @@ function CardPanel() {
                           user: ${task.user_id}
                         `}
                             />
-                            <Button onClick={() => handleDeleteTask(card.id, task.id)} className={classes.editButton}>Delete</Button>
+                            <Button onClick={() => handleDeleteTask(card.id, task.id)} className={classes.editButton}>删除</Button>
                           </ListItem>
                         ))}
                       </List>
-                      <TextField
-                        label="附件"
-                        value={uploadedFileName}
-                        onChange={(e) => setUploadedFileName(e.target.value)}
-                        className={classes.attachmentInput} // 确保你有一个对应的CSS类
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        inputProps={{ // 设置 input 的属性
-                          accept: '.pdf, .docx, .jpg, .png', // 限制文件类型，根据需要调整
-                        }}
-                      />
+
                       <input
-                        accept=".pdf,.docx,.jpg,.png" // 限制文件类型，根据需要调整
+                        accept=".pdf,.docx,.jpg,.png,.doc" // 限制文件类型，根据需要调整
                         style={{ display: 'none' }} // 隐藏原生的 file input
                         id="icon-button-file"
                         type="file"
-                        onChange={handleFileChange}
+                        onChange={(event) => handleFileChange(event, card.id)}
                       />
                       <label htmlFor="icon-button-file">
                         <Button
@@ -751,6 +823,38 @@ function CardPanel() {
                           上传附件
                         </Button>
                       </label>
+
+                      <List className={classes.taskList}>
+                        {uploadedFileName.map((file, index) => (
+                          <ListItem key={index}>
+                            <ListItemText
+                              primary={file.filename}
+                            />
+                            <Box
+                              component="div"
+                              display="flex"
+                              justifyContent="flex-end"
+                              alignItems="center"
+                            >
+                              <Button
+                                edge="end"
+                                aria-label="enter"
+                                onClick={() => handleDownLoad(file.filename)}
+                              >
+                                下载
+                              </Button>
+                              <Button
+                                edge="end"
+                                aria-label="delete"
+                                color="secondary"
+                                onClick={() => handleDeleteFile(card.id, file.filename)}
+                              >
+                                删除
+                              </Button>
+                            </Box>
+                          </ListItem>
+                        ))}
+                      </List>
 
                       <Button
                         variant="contained"
@@ -783,6 +887,18 @@ function CardPanel() {
             </Grid>
           ))}
         </Grid>
+      </div>
+      <div className={showLoadButton ? classes.dimmedBackground : ''}>
+        {showLoadButton && (
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.loadButton}
+            onClick={readAll}
+          >
+            Start Work !
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -73,18 +73,6 @@ export class addCardController {
           );
         `);}
 
-      const [tables3] = await connection.query('SHOW TABLES LIKE "attachments"');
-      if (tables3.length === 0) {
-        await connection.query(`
-          CREATE TABLE attachments (
-              user_id VARCHAR(255) NOT NULL,
-              id INT PRIMARY KEY,
-              task_id INT NOT NULL,
-              file_name VARCHAR(255) NOT NULL,
-              file_path VARCHAR(255) NOT NULL
-          );
-        `);}
-
       const sql = `INSERT INTO projects (proId,user_id, id, state, name, ddl, content) VALUES (?, ?, ?, ?, ?, ?, ?)`;
       const [result] = await connection.query(sql, [proId,user_id, project_id, project_state,project_name, project_ddl,project_content]);
     

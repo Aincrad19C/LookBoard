@@ -1,68 +1,67 @@
-import { Controller, Post, Inject } from '@midwayjs/core';
-import { Context } from '@midwayjs/koa';
-import { UserService } from '../service/user.service';
+import { Controller, Inject, Post, Files, Fields } from '@midwayjs/core';
 import * as fs from 'fs';
 import * as path from 'path';
 
 @Controller('/upload')
-export class UploadController {
+export class upLoadController {
+
   @Inject()
-  ctx: Context;
-  @Inject()
-  userService: UserService;
+  ctx;
+
+  // 指定文件存储的路径
+  private uploadPath = path.join(__dirname,'..' ,'uploads');
+
+  constructor() {
+    // 在构造函数中创建上传目录
+    this.createUploadsDirectory();
+  }
+
+  // 创建上传目录的方法
+  private createUploadsDirectory() {
+    if (!fs.existsSync(this.uploadPath)) {
+      fs.mkdirSync(this.uploadPath, { recursive: true });
+      console.log(`创建上传目录成功: ${this.uploadPath}`);
+    }
+  }
 
   @Post('/')
-  async upLoad(): Promise<any> {
-    const uploadPath = path.join(__dirname, '..', 'uploads');
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-
-    try {
-      if (!this.ctx.is('multipart')) {
-        throw new Error('请上传文件');
+  async upload(@Files() files, @Fields() fields) {
+    // 遍历所有上传的文件
+    for (const file of files) {
+      // 创建一个写入流
+      const writeStream = fs.createWriteStream(path.join(this.uploadPath, file.filename));
+      // 如果文件是临时文件，则使用文件路径
+      if (typeof file.data === 'string') {
+        const readStream = fs.createReadStream(file.data);
+        readStream.pipe(writeStream);
+      } else {
+        // 如果文件是流，则直接写入
+        file.data.pipe(writeStream);
       }
 
-      const parts = this.ctx.multipart();
-      let part;
-      while ((part = await parts()) != null) {
-        if (part.length) {
-        } else {
-          const filename = part.filename;
-          const filePath = path.join(uploadPath, filename);
-          const writeStream = fs.createWriteStream(filePath);
-          part.pipe(writeStream);
+      // 当写入完成时，关闭流
+      writeStream.on('finish', () => {
+        writeStream.close();
+        // 可以在这里执行其他操作，比如记录日志或者更新数据库
+      });
 
-          await new Promise((resolve, reject) => {
-            writeStream.on('finish', resolve);
-            writeStream.on('error', reject);
-          });
-        }
-      }
-
-      const response = {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          message: '文件上传成功',
-        },
-      };
-      return response;
-    } catch (err) {
-      console.error(err);
-      const errorResponse = {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          message: '文件上传失败',
-          error: err.message,
-        },
-      };
-      return errorResponse;
+      // 处理错误
+      writeStream.on('error', (error) => {
+        console.error('文件写入失败:', error);
+      });
     }
+
+    const response = {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: {
+        message: '文件上传成功',
+        files,
+        fields
+      },
+    };
+    return response;
   }
 }

@@ -2,8 +2,8 @@ import { Controller, Post, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { UserService } from '../service/user.service';
 
-@Controller('/readAllPro')
-export class readAllController {
+@Controller('/readData')
+export class readDataController {
     @Inject()
     ctx: Context;
     @Inject()
@@ -13,7 +13,10 @@ export class readAllController {
     async readAllPro(): Promise<any> {
         const mysql = require('mysql2/promise');
         const userData = this.ctx.request.body;
-        const { user_id } = userData as { user_id: string };
+        const { proId, project_id } = userData as {
+            proId: number,
+            project_id: any,
+        };
         const connection = await mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -23,19 +26,8 @@ export class readAllController {
         });
 
         try {
-            const sql = `SELECT user_id, id, title, content, members FROM pro WHERE user_id = ?`;
-            const [responses] = await connection.execute(sql, [user_id]);
-
-            const newForm = [];
-            for (let i = 0; i < responses.length; i++) {
-                const newProjectForm = {
-                    id: responses[i].id,
-                    title: responses[i].title,
-                    content: responses[i].content,
-                    members: responses[i].members,
-                };
-                newForm.push(newProjectForm);
-            }
+            const sql = `SELECT filename FROM file_info WHERE proId = ? AND project_id = ?`;
+            const [pros] = await connection.execute(sql, [proId, project_id]);
             const response = {
                 status: 200,
                 headers: {
@@ -43,7 +35,7 @@ export class readAllController {
                 },
                 body: {
                     message: '查询成功',
-                    projects: newForm,
+                    files:pros
                 },
             };
             return response;

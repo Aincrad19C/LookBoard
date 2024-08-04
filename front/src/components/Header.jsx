@@ -22,7 +22,7 @@ const Header = () => {
         <ul>
           <li><a href="#home" onClick={(e) => {
             e.preventDefault();
-            navigate(`/ProjectPage?username=${username}&isLoad=false`);
+            navigate(`/ProjectPage?username=${username}`);
           }}>项目总览</a></li>
           <li><a href="#services" onClick={(e) => {
             e.preventDefault();
