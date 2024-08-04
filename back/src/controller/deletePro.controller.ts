@@ -13,7 +13,7 @@ export class deleteCardController {
   async deletePro(): Promise<any> {
     const mysql = require('mysql2/promise');
     const userData = this.ctx.request.body;
-    const { proId,username } = userData as {proId:any, username: string};
+    const { proId,user_id } = userData as {proId:any, user_id: string};
     
     const connection = await mysql.createConnection({
       host: 'localhost',
@@ -25,7 +25,7 @@ export class deleteCardController {
 
     try {
       const sql = `DELETE FROM pro WHERE id = ? AND user_id = ?`;
-      const [result] = await connection.query(sql, [proId,username]);
+      const [result] = await connection.query(sql, [proId,user_id]);
     
       console.log(result);
 

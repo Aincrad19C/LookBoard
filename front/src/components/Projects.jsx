@@ -208,6 +208,7 @@ function AdjustableList() {
         try {
             const response = await axios.post('http://127.0.0.1:7001/deletePro', { user_id: username, proId: proid });
             if (response.data.status === 200) {
+                alert("删除项目成功");
                 setList(currentList => currentList.filter(item => item.id !== proid));
             } else {
                 console.log('Failed to fetch projects:', response.data);
