@@ -1,0 +1,13 @@
+.drawer-button {
+  position: fixed;
+  top: 0; /* 保持不变，按钮位于顶部 */
+  right: 0; /* 设置为按钮宽度，使其位于页面左边 */
+  z-index: 1000;
+  color: #000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 55px;
+  width: 85px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+}

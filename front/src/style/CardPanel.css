@@ -1,0 +1,41 @@
+
+.selectState {
+    margin: 8px 0;
+    /* 外边距，上下有间隔，左右默认 */
+    padding: 6px;
+    /* 内边距 */
+    font-size: 1rem;
+    /* 字体大小 */
+    color: #333;
+    /* 字体颜色 */
+    background-color: #fff;
+    /* 背景颜色 */
+    border: 1px solid #ccc;
+    /* 边框 */
+    border-radius: 4px;
+    /* 边框圆角 */
+    appearance: none;
+    /* 移除默认的箭头 */
+    -webkit-appearance: none;
+    /* 针对webkit浏览器 */
+    -moz-appearance: none;
+    /* 针对firefox浏览器 */
+    background-image: linear-gradient(45deg, transparent 50%, #333 50%),
+        linear-gradient(135deg, #333 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+}
+
+.selectState:focus {
+    outline: none;
+    /* 移除聚焦时的轮廓 */
+    border-color: #3f51b5;
+    /* 聚焦时的边框颜色 */
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+    /* 聚焦时的投影 */
+}
+
+.expandedTextField {
+    width: 100%;
+  }
