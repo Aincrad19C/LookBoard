@@ -24,7 +24,8 @@ jobs:
       - name: Install front dependencies
         working-directory: front
         run: npm ci --force
-      - run: npm run build
+      - working-directory: front
+        run: npm run build
 
   build-backend:
     needs: build-frontend
@@ -37,7 +38,8 @@ jobs:
       - name: Install back dependencies
         working-directory: back
         run: npm ci
-      - run: npm run build
+      - working-directory: back
+        run: npm run build
 
   publish-gpr:
     needs: [build-frontend,build-backend]
