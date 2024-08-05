@@ -41,19 +41,32 @@ jobs:
       - working-directory: back
         run: npm run build
 
-  publish-gpr:
-    needs: [build-frontend,build-backend]
+  publish-packages:
+    needs: [build-frontend, build-backend]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com/'
+
+      # Publish frontend package
+      - name: Publish frontend to GitHub Packages
+        working-directory: front
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      # Publish backend package
+      - name: Publish backend to GitHub Packages
+        working-directory: back
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
