@@ -8,18 +8,33 @@ on:
     types: [created]
 
 jobs:
-  build:
+  build-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm test
+      - name: Install front dependencies
+        working-directory: front
+        run: npm ci
+        run: npm run build
+
+  build-backend:
+    needs: build-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+            node-version: 20
+      - name: Install back dependencies
+        working-directory: back
+        run: npm ci
+        run: npm run build
 
   publish-gpr:
-    needs: build
+    needs: [build-frontend,build-backend]
     runs-on: ubuntu-latest
     permissions:
       contents: read
