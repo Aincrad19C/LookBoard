@@ -560,7 +560,7 @@ function CardPanel() {
   }
 
   // 附件上传
-  const [uploadedFileName, setUploadedFileName] = useState([{ filename: "aFile" }]);
+  const [uploadedFileName, setUploadedFileName] = useState([]);
 
   const handleFileChange = async (event, cardId) => {
     const file = event.target.files[0]; // 获取文件对象
