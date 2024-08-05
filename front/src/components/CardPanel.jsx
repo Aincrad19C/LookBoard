@@ -240,8 +240,7 @@ function CardPanel() {
     return (
       <div className="csstransforms container">
         <div className="component">
-          {/*Start Nav Structure*/}
-          <button className="cn-button" id="cn-button" ref={buttonRef}>Menu</button>
+          <button className="cn-button" id="cn-button" ref={buttonRef}>Status</button>
           <div className="cn-wrapper" id="cn-wrapper" ref={wrapperRef}>
             <ul>
               <li>

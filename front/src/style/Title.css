@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 0px; /* 添加顶部外边距，根据需要调整值 */
+    margin-top: -60px; /* 添加顶部外边距，根据需要调整值 */
   }
   
   .title {

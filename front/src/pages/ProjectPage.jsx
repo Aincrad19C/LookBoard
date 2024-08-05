@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import Wave from '../components/Wave.jsx'
 import Header from '../components/Header.jsx'
 import Projects from '../components/Projects.jsx'
 
@@ -12,7 +11,6 @@ function App() {
     <>
         <Header/>
         <Projects/>
-        <Wave/>
     </>
   )
 }

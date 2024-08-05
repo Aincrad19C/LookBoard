@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Title from '../components/Title.jsx'
 import Login from '../components/Login.jsx'
 import Wave from '../components/Wave.jsx'
-import Header from '../components/Header.jsx'
 import Background from '../components/ImageCarousel.jsx'
 
 
@@ -12,7 +11,6 @@ function App() {
   return (
     <>
         <Background/>
-        <Header/>
         <Title/>
         <Login/>
         <Wave/>

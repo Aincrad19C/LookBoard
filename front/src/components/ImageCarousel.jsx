@@ -1,9 +1,9 @@
 // ImageCarousel.js
 import React, { Component } from 'react';
 import '../style/ImageCarousel.css'; // 引入CSS样式
-import image1 from '../images/stars.jpg';
-import image2 from '../images/star2.png';
-import image3 from '../images/star3.png';
+import image1 from '../images/star7.png';
+import image2 from '../images/star3.png';
+import image3 from '../images/star2.png';
 import image4 from '../images/star4.png';
 import image5 from '../images/star5.png';
 

@@ -14,34 +14,62 @@ const useStyles = makeStyles((theme) => ({
         width: 300,
         flexShrink: 0,
         marginTop: 66,
+        backgroundColor: '#0a0a23', // 深色背景，模拟星空
     },
     drawerPaper: {
         width: 300,
-        top: 66,
+        top: 64,
+        backgroundColor: '#0a0a23',
     },
     mainContent: {
         marginLeft: 240,
         width: `calc(100% - 240px)`,
         flexGrow: 1,
         padding: theme.spacing(3),
+        backgroundColor: '#0a0a23',
+        color: '#c0c0c0',
     },
     list: {
         width: '100%',
+        backgroundColor: '#0a0a23',
     },
     cardInput: {
         marginRight: theme.spacing(2),
         width: '250px',
+        backgroundColor: '#1a1a2e',
+        color: '#ffffff',
+        '& input': {
+            color: '#ffffff',
+        },
+        '& label': {
+            color: '#c0c0c0',
+        },
+        '&:hover': {
+            backgroundColor: '#2c2c42',
+        },
+        '& .MuiInputBase-input': {
+            color: '#ffffff',
+        },
     },
     editButton: {
         top: theme.spacing(0),
         margin: theme.spacing(1),
         width: 180,
+        backgroundColor: '#3f3f58',
+        color: '#c0c0c0',
+        '&:hover': {
+            backgroundColor: '#565675',
+        },
     },
     memberList: {
-        top: theme.spacing(-2),
+        top: theme.spacing(0),
         height: 250,
         maxHeight: 300,
         overflow: 'auto',
+        backgroundColor: '#1a1a2e',
+        '& .MuiListItemText-primary': {
+            color: '#ffffff',
+        },
     },
     loadButton: {
         position: 'fixed',
@@ -54,6 +82,11 @@ const useStyles = makeStyles((theme) => ({
         left: '50%',
         transform: 'translate(-50%, -50%)',
         zIndex: 7000,
+        backgroundColor: '#3f3f58',
+        color: '#c0c0c0',
+        '&:hover': {
+            backgroundColor: '#565675',
+        },
     },
     dimmedBackground: {
         position: 'absolute',
@@ -63,6 +96,13 @@ const useStyles = makeStyles((theme) => ({
         left: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: 6000,
+    },
+    listItem: {
+        backgroundColor: '#565675',
+        color: '#000000',
+        '&:hover': {
+            backgroundColor: '#ffffff',
+        },
     },
 }));
 
@@ -76,7 +116,7 @@ function AdjustableList() {
 
     const [editedTitle, setEditedTitle] = useState('');
     const [editedContent, setEditedContent] = useState('');
-    const [memberList, setmemberList] = useState([{ name: username }]);
+    const [memberList, setmemberList] = useState([]);
     const [newMember, setMember] = useState('');
 
     const [showLoadButton, setShowLoadButton] = useState(true);
@@ -113,20 +153,25 @@ function AdjustableList() {
     };
 
     const handleCreateProject = () => {
-        const newProject = {
-            id: Date.now(),
-            title: editedTitle,
-            content: editedContent,
-            members: memberList,
-        };
+        if (editedTitle === '' || memberList.length === 0) {
+            alert("名称和成员不能为空")
+        }
+        else {
+            const newProject = {
+                id: Date.now(),
+                title: editedTitle,
+                content: editedContent,
+                members: memberList,
+            };
 
-        setList(list => [...list, newProject]);
-        postNewProject(newProject);
+            setList(list => [...list, newProject]);
+            postNewProject(newProject);
 
-        setEditedTitle('');
-        setEditedContent('');
-        setmemberList([{ name: username }]);
-        setMember('');
+            setEditedTitle('');
+            setEditedContent('');
+            setmemberList([{ name: username }]);
+            setMember('');
+        }
     };
 
     async function postNewProject(newProject) {
@@ -181,6 +226,7 @@ function AdjustableList() {
             if (response.data.status === 200) {
                 setShowLoadButton(false);
                 setList(response.data.body.projects);
+                setmemberList([{ name: username }]);
                 alert("读取成功");
             } else {
                 console.log('Failed to fetch projects:', response.data);
@@ -190,14 +236,9 @@ function AdjustableList() {
         }
     };
 
-
-
-
-
-
     const [width, setWidth] = useState(1250);
     const [height, setHeight] = useState(635);
-    const [top, setTop] = useState(66);  // 初始顶部位置
+    const [top, setTop] = useState(64);  // 初始顶部位置
     const [left, setLeft] = useState(300); // 初始左侧位置
 
     const [list, setList] = useState([]);
@@ -229,6 +270,8 @@ function AdjustableList() {
                     position: 'fixed',
                     padding: 16,
                     overflow: 'auto',
+                    backgroundColor: '#1a1a2e', // 深色背景，模拟星空
+                    color: '#c0c0c0', // 浅色字体，对比明显
                 }}
             >
                 <List>
@@ -236,6 +279,7 @@ function AdjustableList() {
                         <ListItem
                             key={index}
                             button
+                            className={classes.listItem}
                         >
                             <ListItemText
                                 primary={item.title}
@@ -320,7 +364,6 @@ function AdjustableList() {
                             color="primary"
                             className={classes.editButton}
                             onClick={() => handleAddMember(newMember)}
-                            disabled={!newMember}
                             multiline
                         >
                             添加成员
