@@ -23,7 +23,7 @@ jobs:
           node-version: 20
       - name: Install front dependencies
         working-directory: front
-        run: npm ci
+        run: npm ci --force
       - run: npm run build
 
   build-backend:
