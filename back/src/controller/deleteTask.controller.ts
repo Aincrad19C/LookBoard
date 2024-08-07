@@ -16,7 +16,7 @@ export class deleteTaskController {
     const { user_id, project_id, task_id } = userData as {user_id: string, project_id: any,task_id: any};
     
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

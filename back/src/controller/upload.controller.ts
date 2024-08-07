@@ -9,7 +9,7 @@ export class upLoadController {
   ctx;
 
   // 指定文件存储的路径
-  private uploadPath = path.join(__dirname,'..' ,'uploads');
+  private uploadPath = path.join('uploads');
 
   constructor() {
     // 在构造函数中创建上传目录

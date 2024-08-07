@@ -15,7 +15,7 @@ export class readAllController {
         const userData = this.ctx.request.body;
         const { user_id } = userData as { user_id: string };
         const connection = await mysql.createConnection({
-            host: 'localhost',
+            host: 'db',
             user: 'root',
             database: 'mysql',
             password: 'Misaka20001',

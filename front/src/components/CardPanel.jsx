@@ -321,7 +321,7 @@ function CardPanel() {
         title: newCardTitle,
         content: 'New card content',
         date: newCardDate,
-        tasks: [{ id: 1, title: 'title', content: 'content' }]
+        tasks: []
       };
       const newCardForm = {
         proId: proid,

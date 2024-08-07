@@ -30,7 +30,7 @@ export class fileDataController {
     // 创建数据库连接
     const mysql = require('mysql2/promise');
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

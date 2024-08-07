@@ -16,7 +16,7 @@ export class deleteDataController {
     const { proId, project_id, fileName } = userData as {proId:any, project_id:any, fileName: string};
     
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

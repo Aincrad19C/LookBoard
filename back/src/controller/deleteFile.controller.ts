@@ -16,7 +16,7 @@ export class deleteDataController {
     const userData = this.ctx.request.body;
     const { filename } = userData as { filename: string };
 
-    const uploadDir = path.join(__dirname,'..', 'uploads');
+    const uploadDir = path.join('uploads');
     const filePath = path.join(uploadDir, filename);
 
     try {

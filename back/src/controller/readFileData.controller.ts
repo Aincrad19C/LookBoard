@@ -18,7 +18,7 @@ export class readDataController {
             project_id: any,
         };
         const connection = await mysql.createConnection({
-            host: 'localhost',
+            host: 'db',
             user: 'root',
             database: 'mysql',
             password: 'Misaka20001',

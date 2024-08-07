@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "7001:7001"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=Misaka20001
+      - MYSQL_DATABASE=mysql
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Misaka20001
+      - MYSQL_DATABASE=mysql
+      - MYSQL_USER=Misaka20001
+      - MYSQL_PASSWORD=Misaka20001
+      - MYSQL_CHARACTER_SET_SERVER=utf8mb4
+      - MYSQL_COLLATE_SERVER=utf8mb4_unicode_ci
+
+volumes:
+  db-data:

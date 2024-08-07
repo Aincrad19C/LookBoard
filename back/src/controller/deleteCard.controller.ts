@@ -16,7 +16,7 @@ export class deleteCardController {
     const { proId,project_id } = userData as {proId:any,project_id: any};
     
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

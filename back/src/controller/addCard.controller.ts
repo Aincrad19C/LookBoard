@@ -25,7 +25,7 @@ export class addCardController {
     };  //更改为卡片信息
     
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

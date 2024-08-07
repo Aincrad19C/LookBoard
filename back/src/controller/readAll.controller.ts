@@ -15,7 +15,7 @@ export class readAllController {
     const userData = this.ctx.request.body;
     const {proId, user_id} = userData as {proId: any,user_id:string}; 
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',
@@ -89,7 +89,7 @@ export class readAllController {
     const userData = this.ctx.request.body;
     const {proId,user_id} = userData as {proId:any,user_id:string}; 
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',
@@ -160,7 +160,7 @@ export class readAllController {
     const userData = this.ctx.request.body;
     const {proId,user_id} = userData as {proId:any, user_id:string}; 
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',
@@ -237,7 +237,7 @@ export class readAllController {
     const userData = this.ctx.request.body;
     const {proId,user_id} = userData as {proId:any,user_id:string}; 
     const connection = await mysql.createConnection({
-      host: 'localhost',
+      host: 'db',
       user: 'root',
       database: 'mysql',
       password: 'Misaka20001',

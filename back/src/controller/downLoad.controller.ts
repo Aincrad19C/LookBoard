@@ -1,47 +1,52 @@
 import { Controller, Post, Inject } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { UserService } from '../service/user.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
 @Controller('/downLoadFile')
-export class downLoadController {
+export class DownloadFileController {
   @Inject()
   ctx: Context;
-  @Inject()
-  userService: UserService;
 
   @Post('/')
-  async downloadFile(): Promise<any> {
+  async downLoadFile(): Promise<any> {
     const userData = this.ctx.request.body;
     const { filename } = userData as { filename: string };
 
-    // 确定上传目录的路径
-    const filePath = path.join(__dirname, '..', 'uploads', filename);
-
-    console.log(filePath);
+    const filePath = path.join('uploads',filename)
 
     try {
       if (fs.existsSync(filePath)) {
-        const fileContent = fs.readFileSync(filePath);
-        const downloadDir = path.join(process.env.HOME || process.env.USERPROFILE, 'Downloads');
-        const localFilePath = path.join(downloadDir, filename);
-        fs.writeFileSync(localFilePath, fileContent);
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.on('error', (error) => {
+          console.error('文件读取失败:', error);
+          this.ctx.status = 500;
+          this.ctx.body = { success: false, message: 'Failed to read file', error: error.message };
+        });
 
-        return {
+        // 设置HTTP响应头
+        this.ctx.set('Content-Type', 'application/octet-stream');
+        this.ctx.set('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`);
+        const send = require('koa-send');
+        await send(this.ctx,filePath);
+        console.log("success")
+
+        const response = {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
           },
           body: {
-            message: '下载成功',
+            message: '成功',
           },
-        }
+        };
+        return response;
       } else {
         this.ctx.status = 404;
         this.ctx.body = { success: false, message: 'File not found' };
       }
     } catch (error) {
+      console.error('请求失败:', error);
       this.ctx.status = 500;
       this.ctx.body = { success: false, message: 'Failed to download file', error: error.message };
     }
