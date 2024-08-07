@@ -69,7 +69,7 @@ export class APIController {
             id INT PRIMARY KEY,
             state VARCHAR(255),
             name VARCHAR(255) NOT NULL,
-            ddl DATE,
+            ddl VARCHAR(255),
             content VARCHAR(255)
           );
         `);
@@ -108,7 +108,7 @@ export class APIController {
             project_id BIGINT NOT NULL,
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
             filename VARCHAR(255) NOT NULL,
-            data TEXT NOT NULL,
+            data VARCHAR(255) NOT NULL,
             fieldname VARCHAR(255),
             mimeType VARCHAR(255)
           );
