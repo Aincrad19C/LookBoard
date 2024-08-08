@@ -17,30 +17,27 @@ export class DownloadFileController {
 
     try {
       if (fs.existsSync(filePath)) {
+        // 创建一个可读流
         const fileStream = fs.createReadStream(filePath);
-        fileStream.on('error', (error) => {
-          console.error('文件读取失败:', error);
-          this.ctx.status = 500;
-          this.ctx.body = { success: false, message: 'Failed to read file', error: error.message };
-        });
 
         // 设置HTTP响应头
         this.ctx.set('Content-Type', 'application/octet-stream');
         this.ctx.set('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(filename)}`);
-        const send = require('koa-send');
-        await send(this.ctx,filePath);
-        console.log("success")
 
-        const response = {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: {
-            message: '成功',
-          },
-        };
-        return response;
+        // 将文件流直接传递给响应
+        this.ctx.body = fileStream;
+
+        // 监听流错误，关闭响应
+        fileStream.on('error', (error) => {
+          console.error('文件读取失败:', error);
+          this.ctx.status = 500;
+          this.ctx.res.end(); // 结束响应
+        });
+
+        // 监听流结束，关闭响应
+        fileStream.on('end', () => {
+          this.ctx.res.end(); // 结束响应
+        });
       } else {
         this.ctx.status = 404;
         this.ctx.body = { success: false, message: 'File not found' };

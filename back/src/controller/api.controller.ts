@@ -41,7 +41,7 @@ export class APIController {
           CREATE TABLE users (
             username VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
-          )
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
         `);
       }
 
@@ -55,7 +55,7 @@ export class APIController {
                 title VARCHAR(255) NOT NULL,
                 content TEXT,
                 members JSON
-            );
+            ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
           `);
       }
 
@@ -71,7 +71,7 @@ export class APIController {
             name VARCHAR(255) NOT NULL,
             ddl VARCHAR(255),
             content VARCHAR(255)
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
         `);
       }
 
@@ -84,7 +84,7 @@ export class APIController {
             project_id INT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
       `);
       }
 
@@ -97,7 +97,7 @@ export class APIController {
               project_id INT NOT NULL,
               task_id INT NOT NULL,
               content TEXT NOT NULL
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
         `);
       }
 
@@ -111,7 +111,7 @@ export class APIController {
             data VARCHAR(255) NOT NULL,
             fieldname VARCHAR(255),
             mimeType VARCHAR(255)
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
         `);
       //检查用户名和密码
       const sql = `SELECT * FROM users WHERE username = ? AND password = ?`;
@@ -189,7 +189,7 @@ export class APIController {
           CREATE TABLE users (
             username VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL
-          )
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
         `);
       }
 

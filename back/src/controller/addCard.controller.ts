@@ -46,7 +46,7 @@ export class addCardController {
             name VARCHAR(255) NOT NULL,
             ddl DATE,
             content VARCHAR(255)
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
         `);}
 
       const [tables1] = await connection.query('SHOW TABLES LIKE "tasks"');
@@ -58,7 +58,7 @@ export class addCardController {
             project_id INT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
       `);}
       
       const [tables2] = await connection.query('SHOW TABLES LIKE "comments"');
@@ -70,7 +70,7 @@ export class addCardController {
               project_id INT NOT NULL,
               task_id INT NOT NULL,
               content TEXT NOT NULL
-          );
+          ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
         `);}
 
       const sql = `INSERT INTO projects (proId,user_id, id, state, name, ddl, content) VALUES (?, ?, ?, ?, ?, ?, ?)`;

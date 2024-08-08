@@ -641,11 +641,35 @@ function CardPanel() {
   }
 
   const handleDownLoad = async (fileName) => {
+    console.log(fileName)
     try {
-      const res = await axios.post("http://127.0.0.1:7001/downLoadFile", { filename: fileName });
-      if (res.data.status === 200) {
-        alert("文件下载至默认下载目录");
+      const response = await axios.post(
+        "http://127.0.0.1:7001/downLoadFile",
+        { filename: fileName },
+        {
+          responseType: 'blob', // 设置响应类型为blob
+        }
+      );
+      
+      console.log('send/success')
+      // 检查响应状态
+      if (response.status === 200) {
+        console.log('return_success')
+        // 创建一个Blob对象
+        const blob = new Blob([response.data], { type: 'application/octet-stream' });
+  
+        // 创建一个链接元素用于下载
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fileName; // 设置下载文件名
+        document.body.appendChild(link);
+        link.click();
+  
+        // 清理链接元素和Blob对象
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(link.href);
       } else {
+        alert('文件下载失败，请重试。');
       }
     } catch (error) {
       alert('请求失败: ' + error.message);
