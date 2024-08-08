@@ -22,6 +22,8 @@ export class editCardController {
         project_ddl: string,
         project_content: string
     };
+
+    console.log(project_ddl);
     
     const connection = await mysql.createConnection({
       host: 'db',
@@ -35,9 +37,7 @@ export class editCardController {
       const sql = `UPDATE projects
                    SET state = ?, name = ?, ddl = ?, content = ?
                    WHERE proId = ? AND user_id = ? AND id = ?`;
-      const [result] = await connection.query(sql, [project_state,project_name,project_ddl,project_content,proId,user_id,project_id]);
-    
-      console.log(result);
+      await connection.query(sql, [project_state,project_name,project_ddl,project_content,proId,user_id,project_id]);
 
       const response = {
         status: 200,

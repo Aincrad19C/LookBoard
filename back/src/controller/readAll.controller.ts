@@ -46,7 +46,7 @@ export class readAllController {
             id: projectRow.id,
             state: projectRow.state,
             title: projectRow.name,
-            ddl: projectRow.ddl,
+            date: projectRow.ddl,
             content: projectRow.content,
             tasks: taskRows,
           });
@@ -117,7 +117,7 @@ export class readAllController {
             id: projectRow.id,
             state: projectRow.state,
             title: projectRow.name,
-            ddl: projectRow.ddl,
+            date: projectRow.ddl,
             content: projectRow.content,
             tasks: taskRows,
           });
@@ -194,7 +194,7 @@ export class readAllController {
             id: projectRow.id,
             state: projectRow.state,
             title: projectRow.name,
-            ddl: projectRow.ddl,
+            date: projectRow.ddl,
             content: projectRow.content,
             tasks: taskRows,
           });
@@ -271,7 +271,7 @@ export class readAllController {
             id: projectRow.id,
             state: projectRow.state,
             title: projectRow.name,
-            ddl: projectRow.ddl,
+            date: projectRow.ddl,
             content: projectRow.content,
             tasks: taskRows,
           });

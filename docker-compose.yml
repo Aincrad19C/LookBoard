@@ -5,7 +5,7 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile
-    image: aincrad19c/frontend:v1.3
+    image: aincrad19c/frontend:v1.6
     ports:
       - "3000:80"
 
@@ -13,7 +13,7 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile
-    image: aincrad19c/backend:v1.3
+    image: aincrad19c/backend:v1.6
     ports:
       - "7001:7001"
     environment:

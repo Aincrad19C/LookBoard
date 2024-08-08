@@ -292,6 +292,18 @@ function CardPanel() {
     const selectedState = event.target.value;
     setEditedState(selectedState);
   };
+  const handleDateChange = (event) => {
+    const editedDat = event.target.value;
+    setEditedState(editedDat);
+  };
+  const handleTitleChange = (event) => {
+    const editedTitl = event.target.value;
+    setEditedState(editedTitl);
+  };
+  const handleContChange = (event) => {
+    const editedConten = event.target.value;
+    setEditedState(editedConten);
+  };
   const readAll = async () => {
     try {
       const response = await axios.post('http://127.0.0.1:7001/readAll', { proId: proid, user_id: username });
@@ -313,6 +325,7 @@ function CardPanel() {
     let newId = 1;
     if (newCardTitle.trim() !== '') {
       newId = Math.floor(Date.now() / 1000);
+      setNewCardDate('2024-07-29');
       const newCard = {
         proId: proid,
         user_id: username,
@@ -335,7 +348,6 @@ function CardPanel() {
       postAddCard(newCardForm);
       setCards([...cards, newCard]);
       setNewCardTitle('');
-      setNewCardDate('2024-07-29'); // 重置日期
     }
   };
 
@@ -376,14 +388,6 @@ function CardPanel() {
   }
 
   // 编辑项目
-  const handleEditCard = (card) => {
-    setEditingCard(card.id);
-    setEditedTitle(card.title);
-    setEditedContent(card.content);
-    setEditedDate(card.date);
-    setEditedState(card.state);
-  };
-
   async function postEditedCard(editedCard) {
     try {
       const res = await axios.post("http://127.0.0.1:7001/editCard", editedCard);
@@ -398,7 +402,6 @@ function CardPanel() {
   }
 
   const handleSaveCard = () => {
-    if (editedTitle.trim() !== '') {
       setCards(cards.map((card) => {
         if (card.id === editingCard) {
           const editedCard = {
@@ -406,19 +409,19 @@ function CardPanel() {
             user_id: username,
             project_id: card.id,
             project_state: editedState,
-            project_name: card.title,
-            project_ddl: card.date,
-            project_content: card.content,
+            project_name: editedTitle,
+            project_ddl: editedDate,
+            project_content: editedContent,
           }
           postEditedCard(editedCard);
           return { ...card, state: editedState, title: editedTitle, content: editedContent, date: editedDate };
         }
         return card;
-      }));
-
+      })
+    );
       setEditingCard(null);
       setDialogOpen(false);
-    }
+    
   };
 
   const handleCancelEdit = () => {
@@ -426,16 +429,6 @@ function CardPanel() {
     setDialogOpen(false);
   };
 
-  const handleChange = (type, event) => {
-    const value = event.target.value;
-    if (type === 'title') {
-      setEditedTitle(value);
-    } else if (type === 'content') {
-      setEditedContent(value);
-    } else if (type === 'date') {
-      setEditedDate(value);
-    }
-  };
 
   //新建任务
   const handleAddTask = (cardId) => {
@@ -443,7 +436,7 @@ function CardPanel() {
       const newTask = {
         user_id: username,
         project_id: cardId,
-        id: Math.floor(Date.now() / 100000),
+        id: Math.floor(Date.now() / 1000),
         title: newTaskTitle,
         content: 'New task content',
       };
@@ -514,11 +507,16 @@ function CardPanel() {
   const handleCardClick = (card) => {
     readFileData(card.id);
     setDialogOpen(true);
-    handleEditCard(card);
+    setEditingCard(card.id);
+    setEditedContent(card.content);
+    setEditedDate(card.date);
+    setEditedState(card.state);
+    setEditedTitle(card.title);
   };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
+    setEditingCard(null);
     setSelectedTask(null);
   };
 
@@ -737,7 +735,7 @@ function CardPanel() {
                   </CardContent>
                 </CardActionArea>
               </Card>
-              <Dialog open={dialogOpen} onClose={handleDialogClose}>
+              <Dialog open={editingCard === card.id} onClose={handleDialogClose}>
                 <DialogContent className={classes.dialogContent}>
                   {editingCard === card.id && (
                     <div>
@@ -756,11 +754,9 @@ function CardPanel() {
                       </select>
                       <form className={classes.container} noValidate>
                         <TextField
-                          id="date"
                           label="DDL"
-                          type="date"
                           value={editedDate}
-                          onChange={(e) => handleChange('date', e)}
+                          onChange={(e) => setEditedDate(e.target.value)}
                           className={classes.textField}
                           InputLabelProps={{
                             shrink: true,
@@ -771,7 +767,7 @@ function CardPanel() {
                       <TextField
                         label="任务名称"
                         value={editedTitle}
-                        onChange={(e) => handleChange('title', e)}
+                        onChange={(e) => setEditedTitle(e.target.value)}
                         className={classes.cardInput}
                         margin="normal"
                         InputLabelProps={{
@@ -783,7 +779,7 @@ function CardPanel() {
                       <TextField
                         label="任务内容"
                         value={editedContent}
-                        onChange={(e) => handleChange('content', e)}
+                        onChange={(e) => setEditedContent(e.target.value)}
                         className={classes.cardInput}
                         margin="normal"
                         multiline
