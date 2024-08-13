@@ -31,8 +31,8 @@ export class readAllController {
 
       // 循环遍历projects表中的每一行，执行tasks表的查询
       for (const projectRow of projectRows) {
-        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE user_id = ? AND project_id = ?;`;
-        const [taskRows] = await connection.execute(taskSql, [projectRow.user_id, projectRow.id]);
+        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE project_id = ?;`;
+        const [taskRows] = await connection.execute(taskSql, [ projectRow.id]);
         tasksMap.set(projectRow.id, taskRows);
       }
 
@@ -102,8 +102,8 @@ export class readAllController {
       const [projectRows] = await connection.execute(sql,[proId,user_id]);
       const tasksMap = new Map();
       for (const projectRow of projectRows) {
-        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE user_id = ? AND project_id = ?;`;
-        const [taskRows] = await connection.execute(taskSql, [projectRow.user_id, projectRow.id]);
+        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE project_id = ?;`;
+        const [taskRows] = await connection.execute(taskSql, [ projectRow.id]);
         tasksMap.set(projectRow.id, taskRows);
       }
 
@@ -179,8 +179,8 @@ export class readAllController {
 
       // 循环遍历projects表中的每一行，执行tasks表的查询
       for (const projectRow of projectRows) {
-        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE user_id = ? AND project_id = ?;`;
-        const [taskRows] = await connection.execute(taskSql, [projectRow.user_id, projectRow.id]);
+        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE project_id = ?;`;
+        const [taskRows] = await connection.execute(taskSql, [projectRow.id]);
         tasksMap.set(projectRow.id, taskRows);
       }
 
@@ -256,8 +256,8 @@ export class readAllController {
 
       // 循环遍历projects表中的每一行，执行tasks表的查询
       for (const projectRow of projectRows) {
-        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE user_id = ? AND project_id = ?;`;
-        const [taskRows] = await connection.execute(taskSql, [projectRow.user_id, projectRow.id]);
+        const taskSql = `SELECT user_id, id, project_id, title, description FROM tasks WHERE project_id = ?;`;
+        const [taskRows] = await connection.execute(taskSql, [projectRow.id]);
         tasksMap.set(projectRow.id, taskRows);
       }
 
